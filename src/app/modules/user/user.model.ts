@@ -1,5 +1,5 @@
-import { model, Schema } from "mongoose"
-import { IAuthProvider, IsActive, IUser, Role } from "./user.interface"
+import { model, Schema } from "mongoose";
+import { IAuthProvider, IsActive, IUser, Role } from "./user.interface";
 
 
 const authProviderSchema = new Schema<IAuthProvider>({
@@ -51,7 +51,7 @@ const userSchema = new Schema<IUser>({
      auths: [authProviderSchema],
 }, {
      timestamps: true,
-     versionKey: false
+     versionKey: false 
 })
 
 export const User = model<IUser>("User", userSchema)
