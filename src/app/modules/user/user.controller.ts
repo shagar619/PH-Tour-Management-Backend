@@ -30,3 +30,8 @@ const createUser = async (req: Request, res: Response) => {
 export const UserControllers = {
      createUser,
 }
+
+
+
+// function => try-catch catch => req-res function
+// route matching -> controller -> service -> model -> DB
