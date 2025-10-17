@@ -29,8 +29,8 @@ export const passwordStrengthSchema = z
 
 export const createUserZodSchema = z.object({
 
-     name: z.
-          string({ error: "Name must be string" })
+     name: z
+          .string({ error: "Name must be string" })
           .min(2, {message: "Name must be at least 2 characters long" })
           .max(50, {message: "Name must be at most 50 characters long" }),
      email: z
@@ -39,6 +39,14 @@ export const createUserZodSchema = z.object({
           .min(5, { message: "Email must be at least 5 characters long." })
           .max(100, { message: "Email cannot exceed 100 characters." }),
      password: passwordStrengthSchema,
+     phone: z
+          .string({ error: "Phone number must be string" })
+          .regex(bdPhoneRegex, "Invalid Bangladeshi phone number")
+          .optional(),
+     address: z
+          .string({ error: "Address must be string" })
+          .max(200, { message: "Address cannot exceed 200 characters." })
+          .optional(),
 
 
 })
