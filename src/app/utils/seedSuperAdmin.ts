@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import { envVars } from "../config/env";
-import { IAuthProvider, IUser, Role } from "../modules/user/user.interface";
+import { IAuthProvider, IsActive, IUser, Role } from "../modules/user/user.interface";
 import { User } from "../modules/user/user.model";
 import bcryptjs from "bcryptjs";
 
@@ -12,7 +13,7 @@ export const seedSuperAdmin = async () => {
      const isSuperAdminExist = await User.findOne({ email: envVars.SUPER_ADMIN_EMAIL });
           
      if (isSuperAdminExist) {
-          console.log("Super Admin already exists");
+          // console.log("Super Admin already exists");
           return;
      }
 
@@ -29,13 +30,14 @@ export const seedSuperAdmin = async () => {
           email: envVars.SUPER_ADMIN_EMAIL,
           password: hashedPassword,
           isVerified: true,
+          isActive: IsActive.ACTIVE,
           auths: [authProvider]
      }
 
      const superAdmin = await User.create(payload);
-     console.log("Super Admin seeded successfully:", superAdmin.email);
+     // console.log("Super Admin seeded successfully:", superAdmin.email);
 
      } catch(error) {
-          console.log("Failed to seed Super Admin:", error);
+          // console.log("Failed to seed Super Admin:", error);
      }
 }
