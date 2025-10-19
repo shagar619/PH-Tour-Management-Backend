@@ -24,7 +24,7 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
                throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to access this route");
           }
 
-          // req.user = decoded;
+          req.user = decoded;
           next();
 
      } catch(error) {
