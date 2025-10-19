@@ -48,7 +48,7 @@ const updateUser = async (userId: string, payload: Partial<IUser>, decodedToken:
      * email - can not update
      * name, phone, password address
      * password - re hashing
-     *  only admin superadmin - role, isDeleted...
+     *  only admin & super admin - role, isDeleted...
      * 
      * promoting to super admin - super admin
      */
