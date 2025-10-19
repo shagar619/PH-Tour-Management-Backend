@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 import { envVars } from "../config/env";
 import { IAuthProvider, IsActive, IUser, Role } from "../modules/user/user.interface";
 import { User } from "../modules/user/user.model";
