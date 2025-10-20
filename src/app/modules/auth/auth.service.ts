@@ -3,7 +3,7 @@ import { IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import httpStatus from "http-status-codes";
 import bcryptjs from "bcryptjs";
-import { createUserTokens } from "../../utils/userTokens";
+import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userTokens";
 
 
 const credentialsLogin = async (payload: Partial<IUser>) => {
@@ -50,8 +50,27 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
 
 };
 
+
+const getNewAccessToken = async (refreshToken: string) => {
+
+     // verify refresh token
+     const newAccessToken = await createNewAccessTokenWithRefreshToken(refreshToken);
+
+     return {
+          accessToken: newAccessToken
+     }
+}
+
+
+
+
+
+
+
+
 //user - login - token (email, role, _id) - booking / payment / booking / payment cancel - token
 
 export const AuthService = {
-     credentialsLogin
+     credentialsLogin,
+     getNewAccessToken,
 }
