@@ -96,15 +96,15 @@ const resetPassword = catchAsync(async (req: Request, res: Response, next: NextF
 
      const newPassword = req.body.newPassword;
      const oldPassword = req.body.oldPassword;
-     const decodedToken = req.user;
+     const decodedToken = req.user
 
      await AuthService.resetPassword(oldPassword, newPassword, decodedToken as JwtPayload);
 
      sendResponse(res, {
           success: true,
           statusCode: httpStatus.OK,
-          message: "Password Reset Successfully!",
-          data: null
+          message: "Password Changed Successfully",
+          data: null,
      });
 })
 
@@ -114,5 +114,5 @@ export const AuthControllers = {
      credentialsLogin,
      getNewAccessToken,
      logout,
-     resetPassword
+     resetPassword,
 }
