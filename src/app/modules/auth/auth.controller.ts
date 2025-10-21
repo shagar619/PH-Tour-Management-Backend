@@ -8,6 +8,7 @@ import AppError from "../../errorHelpers/AppError";
 import { setAuthCookie } from "../../utils/setCookie";
 import { JwtPayload } from "jsonwebtoken";
 import { createUserTokens } from "../../utils/userTokens";
+import { envVars } from "../../config/env";
 
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -135,7 +136,7 @@ const googleCallbackController = catchAsync(async (req: Request, res: Response, 
     //     data: null,
     // })
 
-     res.redirect(`${process.env.FRONTEND_URL || "http://localhost:5173"}/${redirectTo}`);
+     res.redirect(`${envVars.FRONTEND_URL || "http://localhost:5173"}/${redirectTo}`);
 
 })
 

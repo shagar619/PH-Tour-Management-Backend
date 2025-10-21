@@ -24,4 +24,8 @@ router.get("/google", async (req: Request, res: Response, next: NextFunction) =>
 })
 
 
+// api/v1/auth/google/callback?state=/booking
+router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login"}), AuthControllers.googleCallbackController)
+
+
 export const AuthRoutes = router;
