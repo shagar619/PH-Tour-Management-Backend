@@ -15,7 +15,9 @@ passport.use(
                callbackURL: envVars.GOOGLE_CALLBACK_URL
           }, async(accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) => {
                try {
+                    
                     const email = profile.emails?.[0].value;
+
                     if (!email) {
                          return done(null, false, { message: "No email found in Google profile" });
                     }
