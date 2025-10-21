@@ -78,7 +78,6 @@ const resetPassword = async (oldPassword: string, newPassword: string, decodedTo
 
      user!.save();
 
-
 }
 
 
