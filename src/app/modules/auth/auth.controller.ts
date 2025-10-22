@@ -71,6 +71,7 @@ const credentialsLogin = catchAsync(async (req: Request, res: Response, next: Ne
 
           // delete user.toObject().password
 
+          // OR,
           const { password: pass, ...rest } = user.toObject();
 
           // Set cookies
@@ -88,6 +89,8 @@ const credentialsLogin = catchAsync(async (req: Request, res: Response, next: Ne
           })
      })(req, res, next);
 })
+
+
 
 
 
