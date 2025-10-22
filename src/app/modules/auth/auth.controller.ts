@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatus from "http-status-codes";
 import { catchAsync } from "../../utils/catchAsync";
@@ -9,11 +10,18 @@ import { setAuthCookie } from "../../utils/setCookie";
 import { JwtPayload } from "jsonwebtoken";
 import { createUserTokens } from "../../utils/userTokens";
 import { envVars } from "../../config/env";
+import passport from "passport";
 
 
-const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-     const loginInfo = await AuthService.credentialsLogin(req.body);
+
+
+
+// Manually handle login with email and password
+
+// const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+//      const loginInfo = await AuthService.credentialsLogin(req.body);
 
 
      // res.cookie("accessToken", loginInfo.accessToken, {
@@ -21,24 +29,67 @@ const credentialsLogin = catchAsync(async (req: Request, res: Response, next: Ne
      // secure: false
      // });
 
-
-
      // res.cookie("refreshToken", loginInfo.refreshToken, {
      // httpOnly: true,
      // secure: false,
      // });
 
 
-     setAuthCookie(res, loginInfo);
+     // OR,
+//      setAuthCookie(res, loginInfo);
 
 
-     sendResponse(res, {
-          success: true,
-          statusCode: httpStatus.OK,
-          message: "User Logged In Successfully",
-          data: loginInfo
-     });
+//      sendResponse(res, {
+//           success: true,
+//           statusCode: httpStatus.OK,
+//           message: "User Logged In Successfully",
+//           data: loginInfo
+//      });
+// })
+
+
+
+
+
+
+
+// Handling login using passport local strategy
+
+const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+     passport.authenticate("local", async (err: any, user: any, info: any) => {
+
+          if (err) {
+               return next(new AppError(httpStatus.UNAUTHORIZED, err));
+          }
+
+          if (!user) {
+               return next(new AppError(httpStatus.UNAUTHORIZED, info.message || "Login failed"));
+          }
+
+          const  userTokens = await createUserTokens(user);
+
+          // delete user.toObject().password
+
+          const { password: pass, ...rest } = user.toObject();
+
+          // Set cookies
+          setAuthCookie(res, userTokens);
+
+          sendResponse(res, {
+               success: true,
+               statusCode: httpStatus.OK,
+               message: "User Logged In Successfully",
+               data: {
+                    accessToken: userTokens.accessToken,
+                    refreshToken: userTokens.refreshToken,
+                    user: rest
+               }
+          })
+     })(req, res, next);
 })
+
+
 
 
 
