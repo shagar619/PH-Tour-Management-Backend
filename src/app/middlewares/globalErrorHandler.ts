@@ -13,8 +13,8 @@ import { handlerValidationError } from "../helpers/handlerValidationError";
 export const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
 
      let errorSources: TErrorSources[] = [];
-     let statusCode = 500
-     let message = "Something Went Wrong!"
+     let statusCode = 500;
+     let message = "Something Went Wrong!";
 
 
 
@@ -23,6 +23,7 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
           const simplifiedError = handlerDuplicateError(err);
           statusCode = simplifiedError.statusCode;
           message = simplifiedError.message;
+          errorSources = simplifiedError.errorSources as TErrorSources[];
      }
 
 
@@ -31,6 +32,7 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
           const simplifiedError = handleCastError(err);
           statusCode = simplifiedError.statusCode;
           message = simplifiedError.message;
+          errorSources = simplifiedError.errorSources as TErrorSources[];
      }
 
 
@@ -72,8 +74,8 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
      res.status(statusCode).json({
           success: false,
           message,
-          err,
           errorSources,
+          err: envVars.NODE_ENV === "development" ? err : null,
           stack: envVars.NODE_ENV === "development" ? err.stack : null
      })
 }
