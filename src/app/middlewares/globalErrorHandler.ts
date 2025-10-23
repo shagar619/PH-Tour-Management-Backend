@@ -5,11 +5,14 @@ import AppError from "../errorHelpers/AppError";
 import { envVars } from "../config/env";
 import { TErrorSources } from "../interfaces/error.types";
 import { handlerDuplicateError } from "../helpers/handleDuplicateError";
+import { handleCastError } from "../helpers/handleCastError";
+import { handlerZodError } from "../helpers/handlerZodError";
+import { handlerValidationError } from "../helpers/handlerValidationError";
 
 
 export const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
 
-     const errorSources: TErrorSources[] = [];
+     let errorSources: TErrorSources[] = [];
      let statusCode = 500
      let message = "Something Went Wrong!"
 
@@ -23,22 +26,54 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
      }
 
 
+     // Cast Error/ Invalid ObjectId Error
+     else if (err.name === "CastError") {
+          const simplifiedError = handleCastError(err);
+          statusCode = simplifiedError.statusCode;
+          message = simplifiedError.message;
+     }
+
+
+     // zod Error
+     else if (err.name === "ZodError") {
+          const simplifiedError = handlerZodError(err);
+          statusCode = simplifiedError.statusCode;
+          message = simplifiedError.message;
+          errorSources = simplifiedError.errorSources as TErrorSources[];
+     }
+
+
+     // Mongoose Validation Error
+     else if (err.name === "ValidationError") {
+          const simplifiedError = handlerValidationError(err);
+          statusCode = simplifiedError.statusCode;
+          message = simplifiedError.message;
+          errorSources = simplifiedError.errorSources as TErrorSources[];
+     }
 
 
 
 
-     if(err instanceof AppError) {
+     // Application Error
+     else if(err instanceof AppError) {
           statusCode = err.statusCode
           message = err.message
-     } else if (err instanceof Error) {
+     }
+
+
+     // Generic Error
+     else if (err instanceof Error) {
           statusCode = 500;
           message = err.message
      }
 
+
+     // Send Error Response
      res.status(statusCode).json({
           success: false,
           message,
           err,
+          errorSources,
           stack: envVars.NODE_ENV === "development" ? err.stack : null
      })
 }
