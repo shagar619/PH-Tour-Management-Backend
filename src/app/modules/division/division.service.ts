@@ -44,9 +44,7 @@ const getAllDivisions = async () => {
      return {
           data: divisions,
           meta: {
-               total: {
-                    totalDivisions
-               }
+               total: totalDivisions
           }
      }
 }
@@ -119,7 +117,7 @@ const deleteDivision = async (id: string) => {
 
 
 
-export const DivisionService = {
+export const DivisionServices = {
      createDivision,
      getAllDivisions,
      getSingleDivision,
