@@ -10,7 +10,8 @@ const tourTypeSchema = new Schema<ITourType>({
      }
 },
 {
-     timestamps: true
+     timestamps: true,
+     versionKey: false
 }
 )
 
@@ -71,7 +72,7 @@ const tourSchema = new Schema<ITour>({
      },
      division: {
           type: Schema.Types.ObjectId,
-          ref: "TourType",
+          ref: "Division",
           required: true
      },
      tourType: {
@@ -86,4 +87,4 @@ const tourSchema = new Schema<ITour>({
 }
 )
 
-export const Tour = model<ITour>("Tour", tourSchema)
+export const Tour = model<ITour>("Tour", tourSchema);

@@ -10,14 +10,14 @@ export interface IDivision {
 
 
 /**
- * division name = Chattogram Division
+ * division name = Dhaka Division
  * 
- * slug = chattogram-division
+ * slug = Dhaka-division
  * 
  * /:id => /efwl432qgyqahwe
  * 
  * /:id => 
  * 
- * /:slug => /division/chattogram-division
+ * /:slug => /division/Dhaka-division
  * 
  */
