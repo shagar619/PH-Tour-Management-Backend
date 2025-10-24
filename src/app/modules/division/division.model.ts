@@ -20,7 +20,8 @@ const divisionSchema = new Schema<IDivision>({
      }
 },
 {
-     timestamps: true
+     timestamps: true,
+     versionKey: false
 }
 )
 
