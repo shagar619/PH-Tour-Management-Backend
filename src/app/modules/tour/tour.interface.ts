@@ -14,13 +14,15 @@ export interface ITour {
      location?: string;
      costFrom?: number;
      startDate?: Date;
+     departureLocation?: string;
+     arrivalLocation?: string;
      endDate?: Date;
      included?: string[];
      excluded?: string[];
      amenities?: string[];
      tourPlan?: string[];
-     tourType?: Types.ObjectId;
      maxGuests?: number;
      minAge?: number;
      division: Types.ObjectId;
+     tourType?: Types.ObjectId;
 }
