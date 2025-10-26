@@ -46,7 +46,7 @@ router.get(
 );
 
 router.post(
-     "/create",
+     "/create-tour",
      checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
      validateRequest(createTourZodSchema),
      TourController.createTour
