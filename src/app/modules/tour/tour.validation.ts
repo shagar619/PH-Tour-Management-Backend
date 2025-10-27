@@ -33,7 +33,7 @@ export const createTourZodSchema = z.object({
      tourPlan: z
           .array(z.string())
           .optional(),
-     maxGuest: z
+     maxGuests: z
           .number()
           .optional(),
      minAge: z

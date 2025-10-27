@@ -32,6 +32,7 @@ export class QueryBuilder<T> {
                $or: searchableField.map(field => ({ [field]: { $regex: searchTerm, $options: "i" } }))
           }
           this.modelQuery = this.modelQuery.find(searchQuery)
+          
           return this;
      }
 
