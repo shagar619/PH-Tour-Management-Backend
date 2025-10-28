@@ -7,7 +7,7 @@ import httpStatus from "http-status-codes";
 
 
 const createBooking = catchAsync(async (req: Request, res: Response) => {
-     
+
      const decodeToken = req.user as JwtPayload;
      const booking = await BookingService.createBooking(req.body, decodeToken.userId);
 
