@@ -8,6 +8,7 @@ import { SSLService } from "../sslCommerz/sslCommerz.service";
 import { PAYMENT_STATUS } from "./payment.interface";
 import { BOOKING_STATUS } from "../booking/booking.interface";
 
+
 const initPayment = async (bookingId: string) => {
 
      const payment = await Payment.findOne({ booking: bookingId });
@@ -15,7 +16,7 @@ const initPayment = async (bookingId: string) => {
      if (!payment) {
           throw new AppError(
                httpStatus.NOT_FOUND,
-               "Payment Not Found! You have not booked this tour"
+               "Payment Not Found! You have not booked this tour."
           )
      }
 
@@ -73,7 +74,7 @@ const successPayment = async (query: Record<string, string>) => {
 
           return {
                success: true,
-               message: "Payment Completed Successfully"
+               message: "Payment Completed Successfully!"
           }
 
      } catch(error) {
