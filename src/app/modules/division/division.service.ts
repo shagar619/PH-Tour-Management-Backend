@@ -1,4 +1,5 @@
 
+import { deleteImageFromCLoudinary } from "../../config/cloudinary.config";
 import AppError from "../../errorHelpers/AppError";
 import { QueryBuilder } from "../../utils/QueryBuilder";
 import { divisionSearchableFields } from "./division.constant";
@@ -81,7 +82,10 @@ const updateDivision = async (id: string, payload: Partial<IDivision>) => {
      const existingDivision = await Division.findById(id);
 
      if (!existingDivision) {
-          throw new AppError(httpStatus.NOT_FOUND, "Division not found");
+          throw new AppError(
+               httpStatus.NOT_FOUND, 
+               "Division not found"
+          );
      }
 
      const duplicateDivision = await Division.findOne({
@@ -109,6 +113,13 @@ const updateDivision = async (id: string, payload: Partial<IDivision>) => {
 
 
      const updateDivision = await Division.findByIdAndUpdate(id, payload, { new: true, runValidators: true });
+
+
+     // Delete junk file while update division thumbnail
+     if (payload.thumbnail && existingDivision.thumbnail) {
+          await deleteImageFromCLoudinary(existingDivision.thumbnail)
+     }
+     
 
      return updateDivision;
 }

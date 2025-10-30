@@ -94,6 +94,9 @@ export const updateTourZodSchema = z.object({
           .optional(),
      arrivalLocation: z
           .string()
+          .optional(),
+     deleteImages: z
+          .array(z.string())
           .optional()
 });
 
