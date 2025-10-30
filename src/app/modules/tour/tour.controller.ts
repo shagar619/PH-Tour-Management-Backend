@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { TourServices } from "./tour.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
+import { ITour } from "./tour.interface";
 
 
 
@@ -11,12 +12,17 @@ import httpStatus from "http-status-codes";
 
 const createTour = catchAsync(async (req: Request, res: Response) => {
 
-     const result = await TourServices.createTour(req.body);
+     const payload: ITour = {
+          ...req.body,
+          images: (req.files as Express.Multer.File[]).map(file => file.path)
+     }
+
+     const result = await TourServices.createTour(payload);
 
      sendResponse(res, {
           statusCode: httpStatus.CREATED,
           success: true,
-          message: "Tour Created Successfully",
+          message: "Tour Created Successfully!",
           data: result
      });
 });
@@ -39,9 +45,30 @@ const getAllTours = catchAsync(async (req: Request, res: Response) => {
 
 
 
+const getSingleTour = catchAsync(async (req: Request, res: Response) => {
+
+     const slug = req.params.slug;
+
+     const result = await TourServices.getSingleTour(slug);
+
+     sendResponse(res, {
+          statusCode: httpStatus.OK,
+          success: true,
+          message: "Tour retrieved successfully",
+          data: result
+     });
+});
+
+
+
 const updateTour = catchAsync(async (req: Request, res: Response) => {
 
-     const result = await TourServices.updateTour(req.params.id, req.body);
+     const payload: ITour = {
+          ...req.body,
+          images: (req.files as Express.Multer.File[]).map(file => file.path)
+     }
+
+     const result = await TourServices.updateTour(req.params.id, payload);
 
      sendResponse(res, {
           statusCode: httpStatus.OK,
@@ -89,7 +116,9 @@ const createTourType = catchAsync(async (req: Request, res: Response) => {
 
 const getAllTourTypes = catchAsync(async (req: Request, res: Response) => {
 
-     const result = await TourServices.getAllTourTypes();
+     const query = req.query;
+
+     const result = await TourServices.getAllTourTypes(query as Record<string, string>);
 
      sendResponse(res, {
           statusCode: httpStatus.OK,
@@ -138,5 +167,6 @@ export const TourController = {
      createTourType,
      getAllTourTypes,
      updateTourType,
-     deleteTourType
+     deleteTourType,
+     getSingleTour
 }
