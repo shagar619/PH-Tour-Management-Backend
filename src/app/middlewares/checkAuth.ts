@@ -9,6 +9,7 @@ import { User } from "../modules/user/user.model";
 import { IsActive } from "../modules/user/user.interface";
 
 
+
 export const checkAuth = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
 
      try {
@@ -36,6 +37,10 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
           
           if(isUserExist.isDeleted) {
                throw new AppError(httpStatus.UNAUTHORIZED, "User is not allowed to access");
+          }
+
+          if (!isUserExist.isVerified) {
+               throw new AppError(httpStatus.UNAUTHORIZED, "User is not verified");
           }
 
 
