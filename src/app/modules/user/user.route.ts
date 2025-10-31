@@ -21,6 +21,12 @@ router.get(
 );
 
 router.get(
+     "/me", 
+     checkAuth(...Object.values(Role)), 
+     UserControllers.getMe
+);
+
+router.get(
      "/:id",
      checkAuth(...Object.values(Role)),
      UserControllers.getSingleUser
