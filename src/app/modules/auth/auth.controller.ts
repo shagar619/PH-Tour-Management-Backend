@@ -143,18 +143,17 @@ const logout = catchAsync(async (req: Request, res: Response, next: NextFunction
           statusCode: httpStatus.ACCEPTED,
           message: "User logged out successfully!",
           data: null
-     })
+     });
 
-})
+});
+
 
 
 const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-     const newPassword = req.body.newPassword;
-     const oldPassword = req.body.oldPassword;
-     const decodedToken = req.user
+     const decodedToken = req.user;
 
-     await AuthService.resetPassword();
+     await AuthService.resetPassword(req.body, decodedToken as JwtPayload);
 
      sendResponse(res, {
           success: true,
