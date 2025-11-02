@@ -9,6 +9,8 @@ import httpStatus from "http-status-codes";
 const OTP_EXPIRY_SECONDS = 2 * 60; // 52 minutes
 
 
+
+
 const sendOTP = async (email: string, name: string) => {
 
      const user = await User.findOne({ email });
@@ -49,8 +51,10 @@ const sendOTP = async (email: string, name: string) => {
 }
 
 
+
 const verifyOTP = async (email: string, otp: string) => {
 
+     // const user = await User.findOne({ email, isVerified: false })
      const user = await User.findOne({ email });
 
      if (!user) {
