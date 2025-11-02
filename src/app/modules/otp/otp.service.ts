@@ -22,7 +22,7 @@ const sendOTP = async (email: string, name: string) => {
 
      if (user.isVerified) {
           throw new AppError(
-               httpStatus.FORBIDDEN,
+               httpStatus.BAD_REQUEST,
                "You are already verified!"
           )
      }
@@ -46,13 +46,49 @@ const sendOTP = async (email: string, name: string) => {
                otp: otp
           }
      })
-
 }
 
 
 const verifyOTP = async (email: string, otp: string) => {
 
-     return{}
+     const user = await User.findOne({ email });
+
+     if (!user) {
+          throw new AppError(
+               httpStatus.NOT_FOUND,
+               "User not found!"
+          )
+     }
+
+     if (user.isVerified) {
+          throw new AppError(
+               httpStatus.BAD_REQUEST,
+               "You are already verified!"
+          )
+     }
+
+     const redisKey = `otp:${email}`;
+     
+     const savedOTP = await redisClient.get(redisKey);
+
+     if (!savedOTP) {
+          throw new AppError(
+               httpStatus.NOT_FOUND,
+               "Invalid OTP"
+          )
+     }
+
+     if (savedOTP !== otp) {
+          throw new AppError(
+               httpStatus.NOT_ACCEPTABLE,
+               "Invalid OTP!"
+          )
+     }
+
+     await Promise.all([
+          User.updateOne({ email }, { isVerified: true }, { runValidators: true }),
+          redisClient.del([redisKey])
+     ])
 }
 
 
