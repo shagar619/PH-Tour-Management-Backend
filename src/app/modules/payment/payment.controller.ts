@@ -4,6 +4,7 @@ import { PaymentService } from "./payment.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
 import { envVars } from "../../config/env";
+import { SSLService } from "../sslCommerz/sslCommerz.service";
 
 
 const initPayment = catchAsync(async (req: Request, res: Response) => {
@@ -67,10 +68,25 @@ const getInvoiceDownloadUrl = catchAsync(async (req: Request, res: Response) => 
 });
 
 
+const validatePayment = catchAsync( async (req: Request, res: Response) => {
+
+     await SSLService.validatePayment(req.body)
+     
+          sendResponse(res, {
+               statusCode: httpStatus.OK,
+               success: true,
+               message: "Payment Validated Successfully",
+               data: null,
+          });
+     }
+);
+
+
 export const PaymentController = {
      initPayment,
      successPayment,
      failPayment,
      cancelPayment,
-     getInvoiceDownloadUrl
+     getInvoiceDownloadUrl,
+     validatePayment
 }

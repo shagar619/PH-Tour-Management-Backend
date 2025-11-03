@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import { envVars } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
 import { ISSLCommerz } from "./sslCommerz.interface";
 import httpStatus from "http-status-codes";
+import { Payment } from "../payment/payment.model";
 
 
 const sslPaymentInit = async (payload: ISSLCommerz) => {
@@ -19,7 +21,7 @@ const sslPaymentInit = async (payload: ISSLCommerz) => {
                success_url: `${envVars.SSL.SSL_SUCCESS_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=success`,
                fail_url: `${envVars.SSL.SSL_FAIL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=fail`,
                cancel_url: `${envVars.SSL.SSL_CANCEL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=cancel`,
-              // ipn_url: "http://localhost:3030/ipn",
+               ipn_url: envVars.SSL.SSL_IPN_URL,
                shipping_method: "N/A",
                product_name: "Tour",
                product_category: "Service",
@@ -48,10 +50,9 @@ const sslPaymentInit = async (payload: ISSLCommerz) => {
           url: envVars.SSL.SSL_PAYMENT_API,
           data: data,
           headers: { "Content-Type": "application/x-www-form-urlencoded" }
-     })
+     });
 
      return response.data;
-
 
      } catch(error) {
           throw new AppError(
@@ -62,6 +63,39 @@ const sslPaymentInit = async (payload: ISSLCommerz) => {
 }
 
 
+
+
+const validatePayment = async (payload: any) => {
+
+     try {
+
+          const response = await axios({
+               method: "GET",
+               url: `${envVars.SSL.SSL_VALIDATION_API}?val_id=${payload.val_id}&store_id=${envVars.SSL.STORE_ID}&store_passwd=${envVars.SSL.STORE_PASS}`
+          });
+
+          // eslint-disable-next-line no-console
+          console.log("ssl commerz validate api response", response.data);
+
+          await Payment.updateOne(
+               { transactionId: payload.tran_id },
+               { paymentGatewayData: response.data },
+               { runValidators: true }
+          )
+
+     } catch(error: any) {
+          throw new AppError(
+               httpStatus.UNAUTHORIZED, 
+               `Payment Validation Error, ${error.message}`
+          )
+     }
+}
+
+
+
+
+
 export const SSLService = {
-     sslPaymentInit
+     sslPaymentInit,
+     validatePayment
 }
