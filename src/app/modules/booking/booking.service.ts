@@ -33,12 +33,12 @@ const createBooking = async (payload: Partial<IBooking>, userId: string) => {
      // ss
      const user = await User.findById(userId);
 
-     // if (!user?.phone || !user?.address) {
-     //      throw new AppError(
-     //           httpStatus.BAD_REQUEST,
-     //           "Please Update Your Profile to Book a Tour!"
-     //      )
-     // }
+     if (!user?.phone || !user?.address) {
+          throw new AppError(
+               httpStatus.BAD_REQUEST,
+               "Please Update Your Profile to Book a Tour!"
+          )
+     }
 
      const tour = await Tour.findById(payload.tour).select("costFrom");
 

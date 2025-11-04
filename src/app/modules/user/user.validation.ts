@@ -59,8 +59,6 @@ export const updateUserZodSchema = z.object({
           .min(2, {message: "Name must be at least 2 characters long" })
           .max(50, {message: "Name must be at most 50 characters long" })
           .optional(),
-     password: passwordStrengthSchema
-          .optional(),
      phone: z
           .string({ error: "Phone number must be string" })
           .regex(bdPhoneRegex, "Invalid Bangladeshi phone number")
