@@ -15,7 +15,7 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
      try {
 
           // Get token from headers
-          const accessToken = req.headers.authorization;
+          const accessToken = req.headers.authorization || req.cookies.accessToken;
 
           if(!accessToken) {
                throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized to access this route");
